@@ -1,0 +1,35 @@
+library(RcmdrPlugin.IPSUR)
+data(RcmdrTestDrive)
+
+## a. Calculate the average salary by gender and smoking status.
+
+Gender = RcmdrTestDrive$gender
+Salary = RcmdrTestDrive$salary
+smoking = RcmdrTestDrive$smoking
+mydata <- data.frame(Gender, Salary,smoking)
+library(tidyverse)
+
+Salary_summmary <- mydata %>%
+  select(Gender, Salary,smoking) %>%
+  group_by(Gender,smoking) %>%
+  summarize(averaged.ES = mean(Salary))
+Salary_summmary
+
+##b. Which gender has the highest mean salary?
+x <- Salary_summmary[Salary_summmary$averaged.ES == max(Salary_summmary$averaged.ES), ]
+paste(x$Gender)
+
+##c. Report the highest mean salary.
+paste(x$averaged.ES)
+#OR
+maximum_salary = max(Salary_summmary$averaged.ES)
+maximum_salary 
+
+## d. Compare the spreads for the genders by calculating the standard deviation of salary by gender.
+Gender_summmary <- mydata %>%
+  select(Gender, Salary) %>%
+  group_by(Gender) %>%
+  summarise(
+    sd.ES = sd(Salary))
+Gender_summmary
+plot(Gender_summmary)
